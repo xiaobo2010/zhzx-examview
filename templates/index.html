@@ -1,0 +1,1389 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>考试数据分析系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding-top: 70px; /* 为固定导航栏留出空间 */
+        }
+        
+        /* 顶部导航栏 */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #ffffff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            padding: 15px 0;
+        }
+        
+        .navbar-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 30px;
+        }
+        
+        .navbar-brand {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c3e50;
+            text-decoration: none;
+        }
+        
+        .navbar-menu {
+            display: flex;
+            list-style: none;
+        }
+        
+        .navbar-item {
+            margin-left: 20px;
+        }
+        
+        .navbar-link {
+            text-decoration: none;
+            color: #7f8c8d;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+        
+        .navbar-link:hover {
+            color: #3498db;
+            background-color: #f8f9fa;
+        }
+        
+        .navbar-link.active {
+            color: #3498db;
+            background-color: #e3f2fd;
+            font-weight: 600;
+        }
+        
+        .container {
+            max-width: 95%;
+            width: 95%;
+            margin: 30px auto;
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-size: 28px;
+            font-weight: 600;
+        }
+        
+        .upload-section {
+            text-align: center;
+            padding: 40px 20px;
+            border: 2px dashed #3498db;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+        }
+        
+        .upload-section:hover {
+            border-color: #2980b9;
+            background-color: #f8f9fa;
+        }
+        
+        .upload-icon {
+            font-size: 60px;
+            color: #3498db;
+            margin-bottom: 20px;
+        }
+        
+        h2 {
+            font-size: 20px;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+        
+        p {
+            color: #7f8c8d;
+            margin-bottom: 25px;
+            font-size: 14px;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        
+        .btn:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .error {
+            background-color: #fee;
+            color: #c0392b;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            border-left: 4px solid #e74c3c;
+        }
+        
+        .info-box {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+        
+        .info-box h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        
+        .info-box ul {
+            list-style-type: disc;
+            padding-left: 20px;
+            color: #555;
+            font-size: 14px;
+        }
+        
+        .info-box li {
+            margin-bottom: 5px;
+        }
+        
+        /* 进度条样式 */
+        .progress-section {
+            display: none;
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .progress-title {
+            font-size: 16px;
+            font-weight: 500;
+            color: #2c3e50;
+        }
+        
+        .progress-percentage {
+            font-size: 14px;
+            color: #3498db;
+            font-weight: 500;
+        }
+        
+        .progress-bar-container {
+            width: 100%;
+            height: 20px;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 15px;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #3498db, #2980b9);
+            border-radius: 10px;
+            transition: width 0.3s ease, background-color 0.5s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 1.5s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        .progress-status {
+            font-size: 14px;
+            color: #7f8c8d;
+            text-align: center;
+        }
+        
+        .progress-bar.completed {
+            background: linear-gradient(90deg, #27ae60, #229954);
+        }
+        
+        .progress-icon {
+            font-size: 16px;
+            margin-right: 8px;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                margin: 20px;
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+            
+            .upload-section {
+                padding: 30px 15px;
+            }
+            
+            .progress-section {
+                padding: 15px;
+            }
+        }
+        
+        /* 结果显示部分样式 */
+        .results-section {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .results-header h2 {
+            font-size: 20px;
+            color: #2c3e50;
+            margin: 0;
+        }
+        
+        .results-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        /* 选项卡样式 */
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .tab-btn {
+            padding: 12px 20px;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            font-size: 14px;
+            font-weight: 500;
+            color: #7f8c8d;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .tab-btn:hover {
+            color: #3498db;
+        }
+        
+        .tab-btn.active {
+            color: #3498db;
+            border-bottom-color: #3498db;
+        }
+        
+        /* 选项卡内容样式 */
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* 导航内容样式 */
+        .nav-content {
+            display: none;
+        }
+        
+        .nav-content.active {
+            display: block;
+        }
+        
+        /* 表格样式 */
+        .table-responsive {
+            overflow-x: auto;
+            border-radius: 6px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+        
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            font-family: “Arial”;
+        }
+        
+        .results-table th,
+        .results-table td {
+            padding: 4px 6px;
+            text-align: center;
+            border: 1px solid #383838;
+            white-space: nowrap;
+            min-width: 40px;
+            max-width: 60px;
+        }
+        
+        .results-table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            color: #2c3e50;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .results-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        
+        /* 表格高亮样式 - 覆盖层方式 */
+        .highlight-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .row-highlight {
+            background-color: rgba(220, 230, 242, 0.3);
+            backdrop-filter: blur(3px);
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+        }
+        
+        .column-highlight {
+            background-color: rgba(220, 230, 242, 0.2);
+            backdrop-filter: blur(2px);
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+        }
+        
+        .results-table td:first-child {
+            font-weight: 500;
+            color: #2c3e50;
+            background-color: #f8f9fa;
+            position: sticky;
+            left: 0;
+            z-index: 5;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .results-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .results-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .btn {
+                flex: 1;
+                text-align: center;
+            }
+            
+            .tabs {
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+            
+            .tab-btn {
+                white-space: nowrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="#" class="navbar-brand">考试数据分析系统</a>
+            <ul class="navbar-menu">
+                <li class="navbar-item">
+                    <a href="#" class="navbar-link active" data-nav="upload">分析系统</a>
+                </li>
+                <li class="navbar-item">
+                    <a href="#" class="navbar-link" data-nav="class-averages">班级平均分</a>
+                </li>
+                <li class="navbar-item">
+                    <a href="#" class="navbar-link" data-nav="info-analysis">信息学科</a>
+                </li>
+                <li class="navbar-item">
+                    <a href="#" class="navbar-link" data-nav="general-analysis">通用学科</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- 上传部分 -->
+        <div id="upload-section">
+            <h1>考试数据分析系统</h1>
+        
+        {% if error %}
+        <div class="error">
+            {{ error }}
+        </div>
+        {% endif %}
+        
+        <form method="post" enctype="multipart/form-data">
+            <div class="upload-section">
+                <div class="upload-icon">📊</div>
+                <h2>上传考试数据文件</h2>
+                <p>点击下方按钮选择Excel文件，系统将自动分析并生成结果</p>
+                <input type="file" name="file" class="file-input" id="fileInput" accept=".xls,.xlsx">
+                <label for="fileInput" class="btn">选择文件</label>
+                <button type="submit" class="btn" style="margin-left: 10px;">开始分析</button>
+            </div>
+        </form>
+        
+        <!-- 进度条部分 -->
+        <div class="progress-section" id="progressSection">
+            <div class="progress-header">
+                <div class="progress-title">
+                    <span class="progress-icon">🔄</span>
+                    <span id="progressTask">分析进行中...</span>
+                </div>
+                <div class="progress-percentage" id="progressPercentage">0%</div>
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+            </div>
+            <div class="progress-status" id="progressStatus">准备开始分析...</div>
+        </div>
+        
+        <!-- 系统功能说明（只在分析系统页面显示） -->
+        <div class="info-box">
+            <h3>系统功能说明：</h3>
+            <ul>
+                <li>支持上传 .xls 和 .xlsx 格式的Excel文件</li>
+                <li>自动计算班级平均分和学科分析</li>
+                <li>按题目编号自然排序</li>
+                <li>生成带色阶效果的Excel分析报告</li>
+                <li>结果文件将自动下载到本地</li>
+            </ul>
+        </div>
+        
+        </div>
+        
+        <!-- 结果显示部分 -->
+        <div class="results-section" id="resultsSection" style="display: none;">
+            <div class="results-header">
+                <h2>分析结果</h2>
+                <div class="results-actions">
+                    <button class="btn" id="colorScaleBtn">
+                        <span>🎨</span> 色阶
+                    </button>
+                    <button class="btn" id="highlightBtn">
+                        <span>🔦</span> 取消高亮
+                    </button>
+                    <button class="btn" id="exportBtn">
+                        <span>📥</span> 导出结果
+                    </button>
+                    <button class="btn" id="newAnalysisBtn" style="margin-left: 10px;">
+                        <span>📊</span> 新分析
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 结果内容 -->
+            <div class="nav-content active" id="class-averages-content">
+                <div class="table-responsive">
+                    <table class="results-table" id="classAveragesTable">
+                        <!-- 动态生成表格内容 -->
+                    </table>
+                </div>
+            </div>
+            <div class="nav-content" id="info-analysis-content" style="display: none;">
+                <div class="table-responsive">
+                    <table class="results-table" id="infoAnalysisTable">
+                        <!-- 动态生成表格内容 -->
+                    </table>
+                </div>
+            </div>
+            <div class="nav-content" id="general-analysis-content" style="display: none;">
+                <div class="table-responsive">
+                    <table class="results-table" id="generalAnalysisTable">
+                        <!-- 动态生成表格内容 -->
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+
+    </div>
+    
+    <script>
+        // 显示所选文件名
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            const fileName = e.target.files[0]?.name;
+            if (fileName) {
+                const uploadSection = document.querySelector('.upload-section');
+                const fileNameElement = document.createElement('p');
+                fileNameElement.textContent = `已选择：${fileName}`;
+                fileNameElement.style.color = '#27ae60';
+                fileNameElement.style.fontWeight = '500';
+                
+                // 移除之前的文件名
+                const existingFileName = uploadSection.querySelector('p[data-filename]');
+                if (existingFileName) {
+                    existingFileName.remove();
+                }
+                
+                fileNameElement.setAttribute('data-filename', 'true');
+                uploadSection.appendChild(fileNameElement);
+            }
+        });
+        
+        // 全局变量，保存上传的文件
+        let uploadedFile = null;
+        
+        // 处理表单提交
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                alert('请选择文件');
+                return;
+            }
+            
+            // 保存上传的文件
+            uploadedFile = file;
+            
+            // 显示进度条
+            const progressSection = document.getElementById('progressSection');
+            const progressBar = document.getElementById('progressBar');
+            const progressPercentage = document.getElementById('progressPercentage');
+            const progressStatus = document.getElementById('progressStatus');
+            const progressTask = document.getElementById('progressTask');
+            
+            progressSection.style.display = 'block';
+            progressBar.style.width = '0%';
+            progressBar.classList.remove('completed');
+            progressPercentage.textContent = '0%';
+            progressStatus.textContent = '准备开始分析...';
+            progressTask.textContent = '分析进行中...';
+            document.querySelector('.progress-icon').textContent = '🔄';
+            
+            // 隐藏结果部分
+            document.getElementById('resultsSection').style.display = 'none';
+            
+            // 创建FormData
+            const formData = new FormData();
+            formData.append('file', file);
+            
+            // 创建XMLHttpRequest
+            const xhr = new XMLHttpRequest();
+            
+            // 处理进度更新
+            let currentProgress = 0;
+            const totalSteps = 5;
+            
+            // 模拟进度更新
+            const updateProgress = (step, message) => {
+                currentProgress = Math.round((step / totalSteps) * 100);
+                progressBar.style.width = `${currentProgress}%`;
+                progressPercentage.textContent = `${currentProgress}%`;
+                progressStatus.textContent = message;
+            };
+            
+            // 定期更新进度
+            const progressInterval = setInterval(() => {
+                if (currentProgress < 90) {
+                    // 模拟进度增加
+                    currentProgress += Math.random() * 5;
+                    if (currentProgress > 90) currentProgress = 90;
+                    progressBar.style.width = `${currentProgress}%`;
+                    progressPercentage.textContent = `${Math.round(currentProgress)}%`;
+                }
+            }, 300);
+            
+            // 处理响应
+            xhr.onload = function() {
+                clearInterval(progressInterval);
+                
+                if (xhr.status === 200) {
+                    // 分析完成
+                    updateProgress(totalSteps, '分析已完成，正在显示结果...');
+                    
+                    // 完成状态
+                    setTimeout(() => {
+                        progressBar.style.width = '100%';
+                        progressBar.classList.add('completed');
+                        progressPercentage.textContent = '100%';
+                        progressStatus.textContent = '分析完成，结果已显示';
+                        progressTask.textContent = '分析完成';
+                        document.querySelector('.progress-icon').textContent = '✅';
+                    }, 500);
+                    
+                    // 处理分析结果
+                    try {
+                        const result = JSON.parse(xhr.responseText);
+                        if (result.success) {
+                            console.log('分析结果:', result);
+                            // 显示结果
+                            displayResults(result);
+                            
+                            // 分析完成后跳转到班级平均分页面
+                            setTimeout(() => {
+                                navigateToClassAverages();
+                                analysisCompleted = true;
+                                console.log('已跳转到班级平均分页面');
+                            }, 1000);
+                        }
+                    } catch (error) {
+                        console.error('处理结果时出错:', error);
+                        alert('处理结果时出错，请重试');
+                    }
+                } else {
+                    // 错误处理
+                    clearInterval(progressInterval);
+                    progressStatus.textContent = '分析过程中出现错误';
+                    progressTask.textContent = '分析失败';
+                    document.querySelector('.progress-icon').textContent = '❌';
+                    
+                    // 显示错误信息
+                    try {
+                        const errorData = JSON.parse(xhr.responseText);
+                        alert(`错误：${errorData.error}`);
+                    } catch {
+                        alert('分析过程中出现错误，请重试');
+                    }
+                }
+            };
+            
+            // 处理错误
+            xhr.onerror = function() {
+                clearInterval(progressInterval);
+                progressStatus.textContent = '网络错误，请检查连接';
+                progressTask.textContent = '分析失败';
+                document.querySelector('.progress-icon').textContent = '❌';
+                alert('网络错误，请检查连接后重试');
+            };
+            
+            // 发送请求到新的API端点
+            xhr.open('POST', '/api/analyze', true);
+            xhr.send(formData);
+        });
+        
+        // 显示结果
+        // 保存临时文件路径
+        let tempFilePath = null;
+        
+        function displayResults(result) {
+            console.log('开始显示结果:', result);
+            // 保存临时文件路径
+            if (result.temp_file) {
+                tempFilePath = result.temp_file;
+                console.log('保存临时文件路径:', tempFilePath);
+            }
+            // 显示班级平均分
+            console.log('班级平均分数据:', result.class_averages);
+            displayTable('classAveragesTable', result.class_averages);
+            
+            // 显示信息学科分析
+            console.log('信息学科分析数据:', result.info_analysis);
+            displayTable('infoAnalysisTable', result.info_analysis);
+            
+            // 显示通用学科分析
+            console.log('通用学科分析数据:', result.general_analysis);
+            displayTable('generalAnalysisTable', result.general_analysis);
+            
+            // 显示结果部分
+            document.getElementById('resultsSection').style.display = 'block';
+            console.log('结果部分已显示');
+        }
+        
+        // 生成表格
+        function displayTable(tableId, data) {
+            console.log('开始生成表格:', tableId, data);
+            const table = document.getElementById(tableId);
+            if (!table) {
+                console.error('表格元素未找到:', tableId);
+                return;
+            }
+            
+            const columns = data.columns;
+            const tableData = data.data;
+            
+            console.log('表格列:', columns);
+            console.log('表格数据:', tableData);
+            
+            // 清空表格
+            table.innerHTML = '';
+            
+            // 存储排序状态
+            const sortState = {
+                column: null,
+                direction: 'desc' // 默认降序
+            };
+            
+            // 创建表头
+            const thead = document.createElement('thead');
+            const headerRow = document.createElement('tr');
+            
+            columns.forEach((column, columnIndex) => {
+                const th = document.createElement('th');
+                th.textContent = column;
+                th.style.cursor = 'pointer';
+                th.style.userSelect = 'none';
+                th.style.position = 'relative';
+                th.style.paddingRight = '20px';
+                
+                // 添加排序图标容器
+                const sortIcon = document.createElement('span');
+                sortIcon.className = 'sort-icon';
+                sortIcon.style.position = 'absolute';
+                sortIcon.style.right = '5px';
+                sortIcon.style.top = '50%';
+                sortIcon.style.transform = 'translateY(-50%)';
+                sortIcon.style.fontSize = '12px';
+                sortIcon.style.color = '#999';
+                th.appendChild(sortIcon);
+                
+                // 添加点击事件监听器
+                th.addEventListener('click', function() {
+                    // 切换排序方向
+                    if (sortState.column === columnIndex) {
+                        sortState.direction = sortState.direction === 'desc' ? 'asc' : 'desc';
+                    } else {
+                        sortState.column = columnIndex;
+                        sortState.direction = 'desc'; // 默认降序
+                    }
+                    
+                    // 排序数据
+                    const sortedData = [...tableData].sort((a, b) => {
+                        const valueA = a[column];
+                        const valueB = b[column];
+                        
+                        // 处理数字和字符串
+                        if (!isNaN(valueA) && !isNaN(valueB)) {
+                            return sortState.direction === 'desc' ? valueB - valueA : valueA - valueB;
+                        } else {
+                            return sortState.direction === 'desc' 
+                                ? String(valueB).localeCompare(String(valueA))
+                                : String(valueA).localeCompare(String(valueB));
+                        }
+                    });
+                    
+                    // 更新表格显示
+                    updateTableBody(table, columns, sortedData);
+                    
+                    // 更新排序图标
+                    updateSortIcons(headerRow, columnIndex, sortState.direction);
+                    
+                    // 重新应用色阶效果（如果启用）
+                    if (colorScaleEnabled) {
+                        applyColorScale();
+                    }
+                    
+                    // 重新初始化表格高亮效果
+                    initTableHighlight();
+                });
+                
+                headerRow.appendChild(th);
+            });
+            
+            thead.appendChild(headerRow);
+            table.appendChild(thead);
+            
+            // 创建表体
+            const tbody = document.createElement('tbody');
+            
+            if (tableData && tableData.length > 0) {
+                tableData.forEach(rowData => {
+                    const row = document.createElement('tr');
+                    
+                    columns.forEach(column => {
+                        const td = document.createElement('td');
+                        td.textContent = rowData[column];
+                        row.appendChild(td);
+                    });
+                    
+                    tbody.appendChild(row);
+                });
+            } else {
+                console.warn('表格数据为空:', tableId);
+                const emptyRow = document.createElement('tr');
+                const emptyCell = document.createElement('td');
+                emptyCell.colSpan = columns.length;
+                emptyCell.textContent = '暂无数据';
+                emptyCell.style.textAlign = 'center';
+                emptyCell.style.padding = '20px';
+                emptyRow.appendChild(emptyCell);
+                tbody.appendChild(emptyRow);
+            }
+            
+            table.appendChild(tbody);
+            
+            // 优化表格样式
+            optimizeTableStyles();
+            
+            // 初始化表格高亮效果
+            initTableHighlight();
+            console.log('表格生成完成:', tableId);
+        }
+        
+        // 更新表格主体
+        function updateTableBody(table, columns, data) {
+            const tbody = table.querySelector('tbody');
+            if (!tbody) return;
+            
+            // 清空表体
+            tbody.innerHTML = '';
+            
+            if (data && data.length > 0) {
+                data.forEach(rowData => {
+                    const row = document.createElement('tr');
+                    
+                    columns.forEach(column => {
+                        const td = document.createElement('td');
+                        td.textContent = rowData[column];
+                        // 保存原始值，以便色阶效果能够正确应用
+                        td.dataset.value = rowData[column];
+                        row.appendChild(td);
+                    });
+                    
+                    tbody.appendChild(row);
+                });
+            } else {
+                const emptyRow = document.createElement('tr');
+                const emptyCell = document.createElement('td');
+                emptyCell.colSpan = columns.length;
+                emptyCell.textContent = '暂无数据';
+                emptyCell.style.textAlign = 'center';
+                emptyCell.style.padding = '20px';
+                emptyRow.appendChild(emptyCell);
+                tbody.appendChild(emptyRow);
+            }
+        }
+        
+        // 更新排序图标
+        function updateSortIcons(headerRow, activeColumnIndex, direction) {
+            const headers = headerRow.querySelectorAll('th');
+            headers.forEach((th, index) => {
+                const sortIcon = th.querySelector('.sort-icon');
+                if (index === activeColumnIndex) {
+                    // 更新活动列的图标
+                    sortIcon.textContent = direction === 'desc' ? '↓' : '↑';
+                    sortIcon.style.color = '#3498db';
+                    sortIcon.style.fontWeight = 'bold';
+                } else {
+                    // 重置其他列的图标
+                    sortIcon.textContent = '';
+                    sortIcon.style.color = '#999';
+                    sortIcon.style.fontWeight = 'normal';
+                }
+            });
+        }
+        
+        // 全局变量，保存分析状态
+        let analysisCompleted = false;
+        
+        // 导航栏切换功能
+        document.querySelectorAll('.navbar-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // 移除所有导航链接的active类
+                document.querySelectorAll('.navbar-link').forEach(l => l.classList.remove('active'));
+                
+                // 添加当前导航链接的active类
+                this.classList.add('active');
+                
+                const navId = this.getAttribute('data-nav');
+                console.log('导航切换到:', navId);
+                
+                // 显示/隐藏对应内容
+                if (navId === 'upload') {
+                    // 显示上传部分
+                    document.getElementById('upload-section').style.display = 'block';
+                    // 分析系统页面不再显示分析结果
+                    document.getElementById('resultsSection').style.display = 'none';
+                    // 显示系统功能说明
+                    document.querySelector('.info-box').style.display = 'block';
+                    console.log('显示上传页面');
+                } else {
+                    // 隐藏上传部分，显示结果部分
+                    document.getElementById('upload-section').style.display = 'none';
+                    document.getElementById('resultsSection').style.display = 'block';
+                    // 隐藏系统功能说明
+                    document.querySelector('.info-box').style.display = 'none';
+                    
+                    // 隐藏所有结果内容
+                    document.querySelectorAll('.nav-content').forEach(content => {
+                        content.style.display = 'none';
+                    });
+                    
+                    // 显示对应结果内容
+                    const contentElement = document.getElementById(`${navId}-content`);
+                    if (contentElement) {
+                        contentElement.style.display = 'block';
+                        console.log('显示内容:', `${navId}-content`);
+                    } else {
+                        console.error('内容元素未找到:', `${navId}-content`);
+                    }
+                }
+            });
+        });
+        
+        // 分析完成后跳转到班级平均分页面
+        function navigateToClassAverages() {
+            console.log('开始跳转到班级平均分页面');
+            // 移除所有导航链接的active类
+            document.querySelectorAll('.navbar-link').forEach(l => l.classList.remove('active'));
+            
+            // 激活班级平均分导航链接
+            const classAvgLink = document.querySelector('.navbar-link[data-nav="class-averages"]');
+            if (classAvgLink) {
+                classAvgLink.classList.add('active');
+                console.log('激活班级平均分导航链接');
+            }
+            
+            // 隐藏上传部分，显示结果部分
+            document.getElementById('upload-section').style.display = 'none';
+            document.getElementById('resultsSection').style.display = 'block';
+            console.log('显示结果部分');
+            // 隐藏系统功能说明
+            document.querySelector('.info-box').style.display = 'none';
+            
+            // 隐藏所有结果内容
+            document.querySelectorAll('.nav-content').forEach(content => {
+                content.style.display = 'none';
+            });
+            
+            // 显示班级平均分内容
+            const classAvgContent = document.getElementById('class-averages-content');
+            if (classAvgContent) {
+                classAvgContent.style.display = 'block';
+                console.log('显示班级平均分内容');
+            } else {
+                console.error('班级平均分内容元素未找到');
+            }
+            
+            // 标记分析已完成
+            analysisCompleted = true;
+            console.log('分析已完成，已跳转到班级平均分页面');
+        }
+        
+        // 表格单元格样式优化
+        function optimizeTableStyles() {
+            const tables = document.querySelectorAll('.results-table');
+            tables.forEach(table => {
+                // 设置行高为28px，保持紧凑
+                const rows = table.querySelectorAll('tr');
+                rows.forEach(row => {
+                    row.style.height = '28px';
+                });
+                
+                // 确保单元格内文本居中对齐
+                const cells = table.querySelectorAll('td, th');
+                cells.forEach(cell => {
+                    cell.style.textAlign = 'center';
+                    cell.style.verticalAlign = 'middle';
+                });
+            });
+        }
+        
+        // 实现表格高亮效果（使用覆盖层方式）
+        function initTableHighlight() {
+            const tables = document.querySelectorAll('.results-table');
+            tables.forEach(table => {
+                // 创建高亮覆盖层元素
+                const createHighlightOverlay = (element, className) => {
+                    // 检查是否已有覆盖层
+                    let overlay = element.querySelector('.highlight-overlay');
+                    if (!overlay) {
+                        overlay = document.createElement('div');
+                        overlay.className = 'highlight-overlay';
+                        overlay.style.position = 'absolute';
+                        overlay.style.top = '0';
+                        overlay.style.left = '0';
+                        overlay.style.width = '100%';
+                        overlay.style.height = '100%';
+                        overlay.style.pointerEvents = 'none';
+                        overlay.style.zIndex = '1';
+                        element.style.position = 'relative';
+                        element.appendChild(overlay);
+                    }
+                    overlay.className = 'highlight-overlay ' + className;
+                    return overlay;
+                };
+                
+                // 移除所有覆盖层
+                const removeAllOverlays = () => {
+                    table.querySelectorAll('.highlight-overlay').forEach(overlay => {
+                        overlay.remove();
+                    });
+                };
+                
+                const cells = table.querySelectorAll('td, th');
+                cells.forEach(cell => {
+                    cell.addEventListener('mouseenter', function() {
+                        // 检查高亮功能是否启用
+                        if (!highlightEnabled) return;
+                        
+                        // 移除之前的所有覆盖层
+                        removeAllOverlays();
+                        
+                        // 获取当前单元格的行和列索引
+                        const row = this.parentElement;
+                        const rowIndex = Array.from(row.parentElement.children).indexOf(row);
+                        const cellIndex = Array.from(row.children).indexOf(this);
+                        
+                        // 高亮整行
+                        const rows = table.querySelectorAll('tr');
+                        rows.forEach(r => {
+                            if (r === row) {
+                                // 为当前行的每个单元格添加覆盖层
+                                r.querySelectorAll('td, th').forEach(cell => {
+                                    const overlay = createHighlightOverlay(cell, 'row-highlight');
+                                    overlay.style.backgroundColor = 'rgba(220, 230, 242, 0.3)';
+                                    overlay.style.backdropFilter = 'blur(0.1px)';
+                                    overlay.style.boxShadow = 'inset 0 0 0 1px rgba(255, 255, 255, 0.5)';
+                                });
+                            }
+                        });
+                        
+                        // 高亮整列
+                        const columns = table.querySelectorAll('tr');
+                        columns.forEach(r => {
+                            const cells = r.children;
+                            if (cells[cellIndex]) {
+                                const colCell = cells[cellIndex];
+                                // 为当前列的每个单元格添加覆盖层
+                                const overlay = createHighlightOverlay(colCell, 'column-highlight');
+                                overlay.style.backgroundColor = 'rgba(220, 230, 242, 0.3)';
+                                overlay.style.backdropFilter = 'blur(0.1px)';
+                                overlay.style.boxShadow = 'inset 0 0 0 1px rgba(255, 255, 255, 0.5)';
+                            }
+                        });
+                    });
+                    
+                    cell.addEventListener('mouseleave', function() {
+                        // 检查高亮功能是否启用
+                        if (!highlightEnabled) return;
+                        
+                        // 移除所有覆盖层
+                        removeAllOverlays();
+                    });
+                });
+            });
+        }
+        
+        // 色阶功能
+        let colorScaleEnabled = false;
+        
+        document.getElementById('colorScaleBtn').addEventListener('click', function() {
+            if (colorScaleEnabled) {
+                // 取消色阶格式
+                removeColorScale();
+                this.innerHTML = '<span>🎨</span> 色阶';
+                colorScaleEnabled = false;
+            } else {
+                // 应用色阶格式
+                applyColorScale();
+                this.innerHTML = '<span>🎨</span> 取消色阶';
+                colorScaleEnabled = true;
+            }
+        });
+        
+        // 高亮功能
+        let highlightEnabled = true;
+        
+        document.getElementById('highlightBtn').addEventListener('click', function() {
+            if (highlightEnabled) {
+                // 禁用高亮
+                highlightEnabled = false;
+                this.innerHTML = '<span>🔦</span> 启用高亮';
+                // 移除所有现有的覆盖层
+                document.querySelectorAll('.highlight-overlay').forEach(overlay => {
+                    overlay.remove();
+                });
+            } else {
+                // 启用高亮
+                highlightEnabled = true;
+                this.innerHTML = '<span>🔦</span> 取消高亮';
+            }
+        });
+        
+        // 应用色阶格式（使用用户提供的确定颜色代码）
+        function applyColorScale() {
+            const tables = document.querySelectorAll('.results-table');
+            tables.forEach(table => {
+                // 获取表格的所有行
+                const rows = table.querySelectorAll('tr');
+                if (rows.length < 2) return;
+                
+                // 获取表头数量（确定列数）
+                const headerCells = rows[0].querySelectorAll('th');
+                const columnCount = headerCells.length;
+                
+                // 定义色阶颜色数组（从低分到高分）
+                const colorScale = [
+                    '#F16B61', // 深橙红
+                    '#F37C6C', // 珊瑚红
+                    '#F58A70', // 暖橘红
+                    '#F89B79', // 浅橙红
+                    '#F8B972', // 暖橙黄
+                    '#F9C97D', // 浅橙黄
+                    '#FAD78A', // 浅金黄
+                    '#F7E98F', // 淡黄色
+                    '#D8E18D', // 浅黄绿
+                    '#C8D988', // 淡黄绿
+                    '#73C286', // 浅草绿
+                    '#64BC7B'  // 深草绿
+                ];
+                
+                // 对每一列分别进行色阶计算（从第二列开始，第一列是班级名称）
+                for (let colIndex = 1; colIndex < columnCount; colIndex++) {
+                    // 收集当前列的所有数值
+                    const columnValues = [];
+                    
+                    // 遍历所有行，收集当前列的数值
+                    for (let rowIndex = 1; rowIndex < rows.length; rowIndex++) {
+                        const cells = rows[rowIndex].querySelectorAll('td');
+                        if (cells.length > colIndex) {
+                            const cell = cells[colIndex];
+                            const value = parseFloat(cell.textContent);
+                            if (!isNaN(value)) {
+                                columnValues.push(value);
+                            }
+                        }
+                    }
+                    
+                    if (columnValues.length === 0) continue;
+                    
+                    // 计算当前列的最小值和最大值
+                    const min = Math.min(...columnValues);
+                    const max = Math.max(...columnValues);
+                    const range = max - min;
+                    
+                    // 应用色阶到当前列的所有单元格
+                    for (let rowIndex = 1; rowIndex < rows.length; rowIndex++) {
+                        const cells = rows[rowIndex].querySelectorAll('td');
+                        if (cells.length > colIndex) {
+                            const cell = cells[colIndex];
+                            const value = parseFloat(cell.textContent);
+                            if (!isNaN(value)) {
+                                // 计算百分比
+                                const percentage = range > 0 ? (value - min) / range : 0;
+                                
+                                // 根据百分比选择对应的颜色
+                                const colorIndex = Math.round(percentage * (colorScale.length - 1));
+                                const color = colorScale[colorIndex];
+                                
+                                // 应用背景色
+                                cell.style.backgroundColor = color;
+                                cell.style.color = '#333';
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // 移除色阶格式
+        function removeColorScale() {
+            const tables = document.querySelectorAll('.results-table');
+            tables.forEach(table => {
+                const cells = table.querySelectorAll('td:not(:first-child)');
+                cells.forEach(cell => {
+                    // 恢复原始样式
+                    cell.style.backgroundColor = '';
+                    cell.style.color = '';
+                });
+            });
+        }
+        
+        // 导出结果功能
+        document.getElementById('exportBtn').addEventListener('click', function() {
+            if (!tempFilePath) {
+                alert('请先进行分析');
+                return;
+            }
+            
+            // 显示导出进度
+            const progressSection = document.getElementById('progressSection');
+            const progressBar = document.getElementById('progressBar');
+            const progressPercentage = document.getElementById('progressPercentage');
+            const progressStatus = document.getElementById('progressStatus');
+            const progressTask = document.getElementById('progressTask');
+            
+            progressSection.style.display = 'block';
+            progressBar.style.width = '0%';
+            progressBar.classList.remove('completed');
+            progressPercentage.textContent = '0%';
+            progressStatus.textContent = '准备导出结果...';
+            progressTask.textContent = '导出进行中...';
+            document.querySelector('.progress-icon').textContent = '📥';
+            
+            // 直接下载已生成的文件
+            const xhr = new XMLHttpRequest();
+            
+            // 处理进度更新
+            let currentProgress = 0;
+            
+            // 定期更新进度
+            const progressInterval = setInterval(() => {
+                if (currentProgress < 90) {
+                    currentProgress += Math.random() * 10;
+                    if (currentProgress > 90) currentProgress = 90;
+                    progressBar.style.width = `${currentProgress}%`;
+                    progressPercentage.textContent = `${Math.round(currentProgress)}%`;
+                }
+            }, 200);
+            
+            // 处理响应
+            xhr.onload = function() {
+                clearInterval(progressInterval);
+                
+                if (xhr.status === 200) {
+                    // 导出完成
+                    progressBar.style.width = '100%';
+                    progressBar.classList.add('completed');
+                    progressPercentage.textContent = '100%';
+                    progressStatus.textContent = '导出完成，文件已开始下载';
+                    progressTask.textContent = '导出完成';
+                    document.querySelector('.progress-icon').textContent = '✅';
+                    
+                    // 处理下载
+                    const blob = new Blob([xhr.response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    // 使用本地时间生成文件名，避免时区问题
+                    const now = new Date();
+                    const year = now.getFullYear();
+                    const month = String(now.getMonth() + 1).padStart(2, '0');
+                    const day = String(now.getDate()).padStart(2, '0');
+                    const hours = String(now.getHours()).padStart(2, '0');
+                    const minutes = String(now.getMinutes()).padStart(2, '0');
+                    const seconds = String(now.getSeconds()).padStart(2, '0');
+                    const timestamp = `${year}${month}${day}_${hours}${minutes}${seconds}`;
+                    a.download = `分析结果_${timestamp}.xlsx`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                } else {
+                    // 错误处理
+                    clearInterval(progressInterval);
+                    progressStatus.textContent = '导出过程中出现错误';
+                    progressTask.textContent = '导出失败';
+                    document.querySelector('.progress-icon').textContent = '❌';
+                    alert('导出过程中出现错误，请重试');
+                }
+            };
+            
+            // 处理错误
+            xhr.onerror = function() {
+                clearInterval(progressInterval);
+                progressStatus.textContent = '网络错误，请检查连接';
+                progressTask.textContent = '导出失败';
+                document.querySelector('.progress-icon').textContent = '❌';
+                alert('网络错误，请检查连接后重试');
+            };
+            
+            // 发送请求下载已生成的文件
+            xhr.open('GET', tempFilePath, true);
+            xhr.responseType = 'blob';
+            xhr.send();
+        });
+        
+        // 新分析功能
+        document.getElementById('newAnalysisBtn').addEventListener('click', function() {
+            // 重置表单
+            document.querySelector('form').reset();
+            
+            // 隐藏结果部分
+            document.getElementById('resultsSection').style.display = 'none';
+            
+            // 隐藏进度条
+            document.getElementById('progressSection').style.display = 'none';
+            
+            // 清除上传的文件
+            uploadedFile = null;
+            
+            // 移除文件名显示
+            const existingFileName = document.querySelector('.upload-section p[data-filename]');
+            if (existingFileName) {
+                existingFileName.remove();
+            }
+            
+            // 滚动到顶部
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>

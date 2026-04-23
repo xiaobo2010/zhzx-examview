@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>语文考试数据分析系统</title>
+    <title>考试数据分析系统</title>
     <style>
-        /* 所有原有样式保持不变 */
         * {
             margin: 0;
             padding: 0;
@@ -17,9 +16,10 @@
             background-color: #f5f7fa;
             color: #333;
             line-height: 1.6;
-            padding-top: 70px;
+            padding-top: 70px; /* 为固定导航栏留出空间 */
         }
         
+        /* 顶部导航栏 */
         .navbar {
             position: fixed;
             top: 0;
@@ -189,6 +189,7 @@
             margin-bottom: 5px;
         }
         
+        /* 进度条样式 */
         .progress-section {
             display: none;
             margin-top: 30px;
@@ -285,6 +286,7 @@
             }
         }
         
+        /* 结果显示部分样式 */
         .results-section {
             margin-top: 30px;
             padding: 20px;
@@ -313,6 +315,7 @@
             gap: 10px;
         }
         
+        /* 选项卡样式 */
         .tabs {
             display: flex;
             margin-bottom: 20px;
@@ -340,6 +343,7 @@
             border-bottom-color: #3498db;
         }
         
+        /* 选项卡内容样式 */
         .tab-content {
             display: none;
         }
@@ -348,6 +352,7 @@
             display: block;
         }
         
+        /* 导航内容样式 */
         .nav-content {
             display: none;
         }
@@ -356,6 +361,7 @@
             display: block;
         }
         
+        /* 表格样式 */
         .table-responsive {
             overflow-x: auto;
             border-radius: 6px;
@@ -366,7 +372,7 @@
             width: 100%;
             border-collapse: collapse;
             font-size: 14px;
-            font-family: "Arial";
+            font-family: “Arial”;
         }
         
         .results-table th,
@@ -391,7 +397,9 @@
         .results-table tr:nth-child(even) {
             background-color: #f8f9fa;
         }
+
         
+        /* 表格高亮样式 - 覆盖层方式 */
         .highlight-overlay {
             position: absolute;
             top: 0;
@@ -423,6 +431,7 @@
             z-index: 5;
         }
         
+        /* 响应式设计 */
         @media (max-width: 768px) {
             .results-header {
                 flex-direction: column;
@@ -452,9 +461,10 @@
     </style>
 </head>
 <body>
+    <!-- 顶部导航栏 -->
     <nav class="navbar">
         <div class="navbar-container">
-            <a href="#" class="navbar-brand">语文考试数据分析系统</a>
+            <a href="#" class="navbar-brand">考试数据分析系统</a>
             <ul class="navbar-menu">
                 <li class="navbar-item">
                     <a href="#" class="navbar-link active" data-nav="upload">分析系统</a>
@@ -463,15 +473,19 @@
                     <a href="#" class="navbar-link" data-nav="class-averages">班级平均分</a>
                 </li>
                 <li class="navbar-item">
-                    <a href="#" class="navbar-link" data-nav="subject-analysis">学科分析</a>
+                    <a href="#" class="navbar-link" data-nav="info-analysis">信息学科</a>
+                </li>
+                <li class="navbar-item">
+                    <a href="#" class="navbar-link" data-nav="general-analysis">通用学科</a>
                 </li>
             </ul>
         </div>
     </nav>
 
     <div class="container">
+        <!-- 上传部分 -->
         <div id="upload-section">
-            <h1>语文考试数据分析系统</h1>
+            <h1>考试数据分析系统</h1>
         
         {% if error %}
         <div class="error">
@@ -490,6 +504,7 @@
             </div>
         </form>
         
+        <!-- 进度条部分 -->
         <div class="progress-section" id="progressSection">
             <div class="progress-header">
                 <div class="progress-title">
@@ -504,6 +519,7 @@
             <div class="progress-status" id="progressStatus">准备开始分析...</div>
         </div>
         
+        <!-- 系统功能说明（只在分析系统页面显示） -->
         <div class="info-box">
             <h3>系统功能说明：</h3>
             <ul>
@@ -512,12 +528,12 @@
                 <li>按题目编号自然排序</li>
                 <li>生成带色阶效果的Excel分析报告</li>
                 <li>结果文件将自动下载到本地</li>
-                <li>*Modified by XiaoBo2010 :)</li>
             </ul>
         </div>
         
         </div>
         
+        <!-- 结果显示部分 -->
         <div class="results-section" id="resultsSection" style="display: none;">
             <div class="results-header">
                 <h2>分析结果</h2>
@@ -537,17 +553,31 @@
                 </div>
             </div>
             
+            <!-- 结果内容 -->
             <div class="nav-content active" id="class-averages-content">
                 <div class="table-responsive">
-                    <table class="results-table" id="classAveragesTable"></table>
+                    <table class="results-table" id="classAveragesTable">
+                        <!-- 动态生成表格内容 -->
+                    </table>
                 </div>
             </div>
-            <div class="nav-content" id="subject-analysis-content" style="display: none;">
+            <div class="nav-content" id="info-analysis-content" style="display: none;">
                 <div class="table-responsive">
-                    <table class="results-table" id="subjectAnalysisTable"></table>
+                    <table class="results-table" id="infoAnalysisTable">
+                        <!-- 动态生成表格内容 -->
+                    </table>
+                </div>
+            </div>
+            <div class="nav-content" id="general-analysis-content" style="display: none;">
+                <div class="table-responsive">
+                    <table class="results-table" id="generalAnalysisTable">
+                        <!-- 动态生成表格内容 -->
+                    </table>
                 </div>
             </div>
         </div>
+        
+
     </div>
     
     <script>
@@ -561,6 +591,7 @@
                 fileNameElement.style.color = '#27ae60';
                 fileNameElement.style.fontWeight = '500';
                 
+                // 移除之前的文件名
                 const existingFileName = uploadSection.querySelector('p[data-filename]');
                 if (existingFileName) {
                     existingFileName.remove();
@@ -571,8 +602,10 @@
             }
         });
         
+        // 全局变量，保存上传的文件
         let uploadedFile = null;
         
+        // 处理表单提交
         document.querySelector('form').addEventListener('submit', function(e) {
             e.preventDefault();
             
@@ -584,8 +617,10 @@
                 return;
             }
             
+            // 保存上传的文件
             uploadedFile = file;
             
+            // 显示进度条
             const progressSection = document.getElementById('progressSection');
             const progressBar = document.getElementById('progressBar');
             const progressPercentage = document.getElementById('progressPercentage');
@@ -600,16 +635,21 @@
             progressTask.textContent = '分析进行中...';
             document.querySelector('.progress-icon').textContent = '🔄';
             
+            // 隐藏结果部分
             document.getElementById('resultsSection').style.display = 'none';
             
+            // 创建FormData
             const formData = new FormData();
             formData.append('file', file);
             
+            // 创建XMLHttpRequest
             const xhr = new XMLHttpRequest();
             
+            // 处理进度更新
             let currentProgress = 0;
             const totalSteps = 5;
             
+            // 模拟进度更新
             const updateProgress = (step, message) => {
                 currentProgress = Math.round((step / totalSteps) * 100);
                 progressBar.style.width = `${currentProgress}%`;
@@ -617,8 +657,10 @@
                 progressStatus.textContent = message;
             };
             
+            // 定期更新进度
             const progressInterval = setInterval(() => {
                 if (currentProgress < 90) {
+                    // 模拟进度增加
                     currentProgress += Math.random() * 5;
                     if (currentProgress > 90) currentProgress = 90;
                     progressBar.style.width = `${currentProgress}%`;
@@ -626,12 +668,15 @@
                 }
             }, 300);
             
+            // 处理响应
             xhr.onload = function() {
                 clearInterval(progressInterval);
                 
                 if (xhr.status === 200) {
+                    // 分析完成
                     updateProgress(totalSteps, '分析已完成，正在显示结果...');
                     
+                    // 完成状态
                     setTimeout(() => {
                         progressBar.style.width = '100%';
                         progressBar.classList.add('completed');
@@ -641,15 +686,19 @@
                         document.querySelector('.progress-icon').textContent = '✅';
                     }, 500);
                     
+                    // 处理分析结果
                     try {
                         const result = JSON.parse(xhr.responseText);
                         if (result.success) {
                             console.log('分析结果:', result);
+                            // 显示结果
                             displayResults(result);
                             
+                            // 分析完成后跳转到班级平均分页面
                             setTimeout(() => {
                                 navigateToClassAverages();
                                 analysisCompleted = true;
+                                console.log('已跳转到班级平均分页面');
                             }, 1000);
                         }
                     } catch (error) {
@@ -657,11 +706,13 @@
                         alert('处理结果时出错，请重试');
                     }
                 } else {
+                    // 错误处理
                     clearInterval(progressInterval);
                     progressStatus.textContent = '分析过程中出现错误';
                     progressTask.textContent = '分析失败';
                     document.querySelector('.progress-icon').textContent = '❌';
                     
+                    // 显示错误信息
                     try {
                         const errorData = JSON.parse(xhr.responseText);
                         alert(`错误：${errorData.error}`);
@@ -671,6 +722,7 @@
                 }
             };
             
+            // 处理错误
             xhr.onerror = function() {
                 clearInterval(progressInterval);
                 progressStatus.textContent = '网络错误，请检查连接';
@@ -679,25 +731,42 @@
                 alert('网络错误，请检查连接后重试');
             };
             
+            // 发送请求到新的API端点
             xhr.open('POST', '/api/analyze', true);
             xhr.send(formData);
         });
         
+        // 显示结果
+        // 保存临时文件路径
         let tempFilePath = null;
         
         function displayResults(result) {
             console.log('开始显示结果:', result);
+            // 保存临时文件路径
             if (result.temp_file) {
                 tempFilePath = result.temp_file;
+                console.log('保存临时文件路径:', tempFilePath);
             }
-            
+            // 显示班级平均分
+            console.log('班级平均分数据:', result.class_averages);
             displayTable('classAveragesTable', result.class_averages);
-            displayTable('subjectAnalysisTable', result.subject_analysis);
             
+            // 显示信息学科分析
+            console.log('信息学科分析数据:', result.info_analysis);
+            displayTable('infoAnalysisTable', result.info_analysis);
+            
+            // 显示通用学科分析
+            console.log('通用学科分析数据:', result.general_analysis);
+            displayTable('generalAnalysisTable', result.general_analysis);
+            
+            // 显示结果部分
             document.getElementById('resultsSection').style.display = 'block';
+            console.log('结果部分已显示');
         }
         
+        // 生成表格
         function displayTable(tableId, data) {
+            console.log('开始生成表格:', tableId, data);
             const table = document.getElementById(tableId);
             if (!table) {
                 console.error('表格元素未找到:', tableId);
@@ -707,13 +776,19 @@
             const columns = data.columns;
             const tableData = data.data;
             
+            console.log('表格列:', columns);
+            console.log('表格数据:', tableData);
+            
+            // 清空表格
             table.innerHTML = '';
             
+            // 存储排序状态
             const sortState = {
                 column: null,
-                direction: 'desc'
+                direction: 'desc' // 默认降序
             };
             
+            // 创建表头
             const thead = document.createElement('thead');
             const headerRow = document.createElement('tr');
             
@@ -725,6 +800,7 @@
                 th.style.position = 'relative';
                 th.style.paddingRight = '20px';
                 
+                // 添加排序图标容器
                 const sortIcon = document.createElement('span');
                 sortIcon.className = 'sort-icon';
                 sortIcon.style.position = 'absolute';
@@ -735,18 +811,22 @@
                 sortIcon.style.color = '#999';
                 th.appendChild(sortIcon);
                 
+                // 添加点击事件监听器
                 th.addEventListener('click', function() {
+                    // 切换排序方向
                     if (sortState.column === columnIndex) {
                         sortState.direction = sortState.direction === 'desc' ? 'asc' : 'desc';
                     } else {
                         sortState.column = columnIndex;
-                        sortState.direction = 'desc';
+                        sortState.direction = 'desc'; // 默认降序
                     }
                     
+                    // 排序数据
                     const sortedData = [...tableData].sort((a, b) => {
                         const valueA = a[column];
                         const valueB = b[column];
                         
+                        // 处理数字和字符串
                         if (!isNaN(valueA) && !isNaN(valueB)) {
                             return sortState.direction === 'desc' ? valueB - valueA : valueA - valueB;
                         } else {
@@ -756,13 +836,18 @@
                         }
                     });
                     
+                    // 更新表格显示
                     updateTableBody(table, columns, sortedData);
+                    
+                    // 更新排序图标
                     updateSortIcons(headerRow, columnIndex, sortState.direction);
                     
+                    // 重新应用色阶效果（如果启用）
                     if (colorScaleEnabled) {
                         applyColorScale();
                     }
                     
+                    // 重新初始化表格高亮效果
                     initTableHighlight();
                 });
                 
@@ -772,19 +857,23 @@
             thead.appendChild(headerRow);
             table.appendChild(thead);
             
+            // 创建表体
             const tbody = document.createElement('tbody');
             
             if (tableData && tableData.length > 0) {
                 tableData.forEach(rowData => {
                     const row = document.createElement('tr');
+                    
                     columns.forEach(column => {
                         const td = document.createElement('td');
                         td.textContent = rowData[column];
                         row.appendChild(td);
                     });
+                    
                     tbody.appendChild(row);
                 });
             } else {
+                console.warn('表格数据为空:', tableId);
                 const emptyRow = document.createElement('tr');
                 const emptyCell = document.createElement('td');
                 emptyCell.colSpan = columns.length;
@@ -796,25 +885,35 @@
             }
             
             table.appendChild(tbody);
+            
+            // 优化表格样式
             optimizeTableStyles();
+            
+            // 初始化表格高亮效果
             initTableHighlight();
+            console.log('表格生成完成:', tableId);
         }
         
+        // 更新表格主体
         function updateTableBody(table, columns, data) {
             const tbody = table.querySelector('tbody');
             if (!tbody) return;
             
+            // 清空表体
             tbody.innerHTML = '';
             
             if (data && data.length > 0) {
                 data.forEach(rowData => {
                     const row = document.createElement('tr');
+                    
                     columns.forEach(column => {
                         const td = document.createElement('td');
                         td.textContent = rowData[column];
+                        // 保存原始值，以便色阶效果能够正确应用
                         td.dataset.value = rowData[column];
                         row.appendChild(td);
                     });
+                    
                     tbody.appendChild(row);
                 });
             } else {
@@ -829,15 +928,18 @@
             }
         }
         
+        // 更新排序图标
         function updateSortIcons(headerRow, activeColumnIndex, direction) {
             const headers = headerRow.querySelectorAll('th');
             headers.forEach((th, index) => {
                 const sortIcon = th.querySelector('.sort-icon');
                 if (index === activeColumnIndex) {
+                    // 更新活动列的图标
                     sortIcon.textContent = direction === 'desc' ? '↓' : '↑';
                     sortIcon.style.color = '#3498db';
                     sortIcon.style.fontWeight = 'bold';
                 } else {
+                    // 重置其他列的图标
                     sortIcon.textContent = '';
                     sortIcon.style.color = '#999';
                     sortIcon.style.fontWeight = 'normal';
@@ -845,69 +947,106 @@
             });
         }
         
+        // 全局变量，保存分析状态
         let analysisCompleted = false;
         
+        // 导航栏切换功能
         document.querySelectorAll('.navbar-link').forEach(link => {
             link.addEventListener('click', function(e) {
                 e.preventDefault();
                 
+                // 移除所有导航链接的active类
                 document.querySelectorAll('.navbar-link').forEach(l => l.classList.remove('active'));
+                
+                // 添加当前导航链接的active类
                 this.classList.add('active');
                 
                 const navId = this.getAttribute('data-nav');
+                console.log('导航切换到:', navId);
                 
+                // 显示/隐藏对应内容
                 if (navId === 'upload') {
+                    // 显示上传部分
                     document.getElementById('upload-section').style.display = 'block';
+                    // 分析系统页面不再显示分析结果
                     document.getElementById('resultsSection').style.display = 'none';
+                    // 显示系统功能说明
                     document.querySelector('.info-box').style.display = 'block';
+                    console.log('显示上传页面');
                 } else {
+                    // 隐藏上传部分，显示结果部分
                     document.getElementById('upload-section').style.display = 'none';
                     document.getElementById('resultsSection').style.display = 'block';
+                    // 隐藏系统功能说明
                     document.querySelector('.info-box').style.display = 'none';
                     
+                    // 隐藏所有结果内容
                     document.querySelectorAll('.nav-content').forEach(content => {
                         content.style.display = 'none';
                     });
                     
+                    // 显示对应结果内容
                     const contentElement = document.getElementById(`${navId}-content`);
                     if (contentElement) {
                         contentElement.style.display = 'block';
+                        console.log('显示内容:', `${navId}-content`);
+                    } else {
+                        console.error('内容元素未找到:', `${navId}-content`);
                     }
                 }
             });
         });
         
+        // 分析完成后跳转到班级平均分页面
         function navigateToClassAverages() {
+            console.log('开始跳转到班级平均分页面');
+            // 移除所有导航链接的active类
             document.querySelectorAll('.navbar-link').forEach(l => l.classList.remove('active'));
+            
+            // 激活班级平均分导航链接
             const classAvgLink = document.querySelector('.navbar-link[data-nav="class-averages"]');
             if (classAvgLink) {
                 classAvgLink.classList.add('active');
+                console.log('激活班级平均分导航链接');
             }
             
+            // 隐藏上传部分，显示结果部分
             document.getElementById('upload-section').style.display = 'none';
             document.getElementById('resultsSection').style.display = 'block';
+            console.log('显示结果部分');
+            // 隐藏系统功能说明
             document.querySelector('.info-box').style.display = 'none';
             
+            // 隐藏所有结果内容
             document.querySelectorAll('.nav-content').forEach(content => {
                 content.style.display = 'none';
             });
             
+            // 显示班级平均分内容
             const classAvgContent = document.getElementById('class-averages-content');
             if (classAvgContent) {
                 classAvgContent.style.display = 'block';
+                console.log('显示班级平均分内容');
+            } else {
+                console.error('班级平均分内容元素未找到');
             }
             
+            // 标记分析已完成
             analysisCompleted = true;
+            console.log('分析已完成，已跳转到班级平均分页面');
         }
         
+        // 表格单元格样式优化
         function optimizeTableStyles() {
             const tables = document.querySelectorAll('.results-table');
             tables.forEach(table => {
+                // 设置行高为28px，保持紧凑
                 const rows = table.querySelectorAll('tr');
                 rows.forEach(row => {
                     row.style.height = '28px';
                 });
                 
+                // 确保单元格内文本居中对齐
                 const cells = table.querySelectorAll('td, th');
                 cells.forEach(cell => {
                     cell.style.textAlign = 'center';
@@ -916,10 +1055,13 @@
             });
         }
         
+        // 实现表格高亮效果（使用覆盖层方式）
         function initTableHighlight() {
             const tables = document.querySelectorAll('.results-table');
             tables.forEach(table => {
+                // 创建高亮覆盖层元素
                 const createHighlightOverlay = (element, className) => {
+                    // 检查是否已有覆盖层
                     let overlay = element.querySelector('.highlight-overlay');
                     if (!overlay) {
                         overlay = document.createElement('div');
@@ -938,6 +1080,7 @@
                     return overlay;
                 };
                 
+                // 移除所有覆盖层
                 const removeAllOverlays = () => {
                     table.querySelectorAll('.highlight-overlay').forEach(overlay => {
                         overlay.remove();
@@ -947,17 +1090,22 @@
                 const cells = table.querySelectorAll('td, th');
                 cells.forEach(cell => {
                     cell.addEventListener('mouseenter', function() {
+                        // 检查高亮功能是否启用
                         if (!highlightEnabled) return;
                         
+                        // 移除之前的所有覆盖层
                         removeAllOverlays();
                         
+                        // 获取当前单元格的行和列索引
                         const row = this.parentElement;
                         const rowIndex = Array.from(row.parentElement.children).indexOf(row);
                         const cellIndex = Array.from(row.children).indexOf(this);
                         
+                        // 高亮整行
                         const rows = table.querySelectorAll('tr');
                         rows.forEach(r => {
                             if (r === row) {
+                                // 为当前行的每个单元格添加覆盖层
                                 r.querySelectorAll('td, th').forEach(cell => {
                                     const overlay = createHighlightOverlay(cell, 'row-highlight');
                                     overlay.style.backgroundColor = 'rgba(220, 230, 242, 0.3)';
@@ -967,11 +1115,13 @@
                             }
                         });
                         
+                        // 高亮整列
                         const columns = table.querySelectorAll('tr');
                         columns.forEach(r => {
                             const cells = r.children;
                             if (cells[cellIndex]) {
                                 const colCell = cells[cellIndex];
+                                // 为当前列的每个单元格添加覆盖层
                                 const overlay = createHighlightOverlay(colCell, 'column-highlight');
                                 overlay.style.backgroundColor = 'rgba(220, 230, 242, 0.3)';
                                 overlay.style.backdropFilter = 'blur(0.1px)';
@@ -981,60 +1131,86 @@
                     });
                     
                     cell.addEventListener('mouseleave', function() {
+                        // 检查高亮功能是否启用
                         if (!highlightEnabled) return;
+                        
+                        // 移除所有覆盖层
                         removeAllOverlays();
                     });
                 });
             });
         }
         
+        // 色阶功能
         let colorScaleEnabled = false;
         
         document.getElementById('colorScaleBtn').addEventListener('click', function() {
             if (colorScaleEnabled) {
+                // 取消色阶格式
                 removeColorScale();
                 this.innerHTML = '<span>🎨</span> 色阶';
                 colorScaleEnabled = false;
             } else {
+                // 应用色阶格式
                 applyColorScale();
                 this.innerHTML = '<span>🎨</span> 取消色阶';
                 colorScaleEnabled = true;
             }
         });
         
+        // 高亮功能
         let highlightEnabled = true;
         
         document.getElementById('highlightBtn').addEventListener('click', function() {
             if (highlightEnabled) {
+                // 禁用高亮
                 highlightEnabled = false;
                 this.innerHTML = '<span>🔦</span> 启用高亮';
+                // 移除所有现有的覆盖层
                 document.querySelectorAll('.highlight-overlay').forEach(overlay => {
                     overlay.remove();
                 });
             } else {
+                // 启用高亮
                 highlightEnabled = true;
                 this.innerHTML = '<span>🔦</span> 取消高亮';
             }
         });
         
+        // 应用色阶格式（使用用户提供的确定颜色代码）
         function applyColorScale() {
             const tables = document.querySelectorAll('.results-table');
             tables.forEach(table => {
+                // 获取表格的所有行
                 const rows = table.querySelectorAll('tr');
                 if (rows.length < 2) return;
                 
+                // 获取表头数量（确定列数）
                 const headerCells = rows[0].querySelectorAll('th');
                 const columnCount = headerCells.length;
                 
+                // 定义色阶颜色数组（从低分到高分）
                 const colorScale = [
-                    '#F16B61', '#F37C6C', '#F58A70', '#F89B79', '#F8B972',
-                    '#F9C97D', '#FAD78A', '#F7E98F', '#D8E18D', '#C8D988',
-                    '#73C286', '#64BC7B'
+                    '#F16B61', // 深橙红
+                    '#F37C6C', // 珊瑚红
+                    '#F58A70', // 暖橘红
+                    '#F89B79', // 浅橙红
+                    '#F8B972', // 暖橙黄
+                    '#F9C97D', // 浅橙黄
+                    '#FAD78A', // 浅金黄
+                    '#F7E98F', // 淡黄色
+                    '#D8E18D', // 浅黄绿
+                    '#C8D988', // 淡黄绿
+                    '#73C286', // 浅草绿
+                    '#64BC7B'  // 深草绿
                 ];
                 
+                // 对每一列分别进行色阶计算（从第二列开始，第一列是班级名称）
                 for (let colIndex = 1; colIndex < columnCount; colIndex++) {
+                    // 收集当前列的所有数值
                     const columnValues = [];
                     
+                    // 遍历所有行，收集当前列的数值
                     for (let rowIndex = 1; rowIndex < rows.length; rowIndex++) {
                         const cells = rows[rowIndex].querySelectorAll('td');
                         if (cells.length > colIndex) {
@@ -1048,19 +1224,26 @@
                     
                     if (columnValues.length === 0) continue;
                     
+                    // 计算当前列的最小值和最大值
                     const min = Math.min(...columnValues);
                     const max = Math.max(...columnValues);
                     const range = max - min;
                     
+                    // 应用色阶到当前列的所有单元格
                     for (let rowIndex = 1; rowIndex < rows.length; rowIndex++) {
                         const cells = rows[rowIndex].querySelectorAll('td');
                         if (cells.length > colIndex) {
                             const cell = cells[colIndex];
                             const value = parseFloat(cell.textContent);
                             if (!isNaN(value)) {
+                                // 计算百分比
                                 const percentage = range > 0 ? (value - min) / range : 0;
+                                
+                                // 根据百分比选择对应的颜色
                                 const colorIndex = Math.round(percentage * (colorScale.length - 1));
                                 const color = colorScale[colorIndex];
+                                
+                                // 应用背景色
                                 cell.style.backgroundColor = color;
                                 cell.style.color = '#333';
                             }
@@ -1070,23 +1253,27 @@
             });
         }
         
+        // 移除色阶格式
         function removeColorScale() {
             const tables = document.querySelectorAll('.results-table');
             tables.forEach(table => {
                 const cells = table.querySelectorAll('td:not(:first-child)');
                 cells.forEach(cell => {
+                    // 恢复原始样式
                     cell.style.backgroundColor = '';
                     cell.style.color = '';
                 });
             });
         }
         
+        // 导出结果功能
         document.getElementById('exportBtn').addEventListener('click', function() {
             if (!tempFilePath) {
                 alert('请先进行分析');
                 return;
             }
             
+            // 显示导出进度
             const progressSection = document.getElementById('progressSection');
             const progressBar = document.getElementById('progressBar');
             const progressPercentage = document.getElementById('progressPercentage');
@@ -1101,9 +1288,13 @@
             progressTask.textContent = '导出进行中...';
             document.querySelector('.progress-icon').textContent = '📥';
             
+            // 直接下载已生成的文件
             const xhr = new XMLHttpRequest();
+            
+            // 处理进度更新
             let currentProgress = 0;
             
+            // 定期更新进度
             const progressInterval = setInterval(() => {
                 if (currentProgress < 90) {
                     currentProgress += Math.random() * 10;
@@ -1113,10 +1304,12 @@
                 }
             }, 200);
             
+            // 处理响应
             xhr.onload = function() {
                 clearInterval(progressInterval);
                 
                 if (xhr.status === 200) {
+                    // 导出完成
                     progressBar.style.width = '100%';
                     progressBar.classList.add('completed');
                     progressPercentage.textContent = '100%';
@@ -1124,10 +1317,12 @@
                     progressTask.textContent = '导出完成';
                     document.querySelector('.progress-icon').textContent = '✅';
                     
+                    // 处理下载
                     const blob = new Blob([xhr.response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
                     const url = URL.createObjectURL(blob);
                     const a = document.createElement('a');
                     a.href = url;
+                    // 使用本地时间生成文件名，避免时区问题
                     const now = new Date();
                     const year = now.getFullYear();
                     const month = String(now.getMonth() + 1).padStart(2, '0');
@@ -1142,6 +1337,7 @@
                     document.body.removeChild(a);
                     URL.revokeObjectURL(url);
                 } else {
+                    // 错误处理
                     clearInterval(progressInterval);
                     progressStatus.textContent = '导出过程中出现错误';
                     progressTask.textContent = '导出失败';
@@ -1150,6 +1346,7 @@
                 }
             };
             
+            // 处理错误
             xhr.onerror = function() {
                 clearInterval(progressInterval);
                 progressStatus.textContent = '网络错误，请检查连接';
@@ -1158,22 +1355,33 @@
                 alert('网络错误，请检查连接后重试');
             };
             
+            // 发送请求下载已生成的文件
             xhr.open('GET', tempFilePath, true);
             xhr.responseType = 'blob';
             xhr.send();
         });
         
+        // 新分析功能
         document.getElementById('newAnalysisBtn').addEventListener('click', function() {
+            // 重置表单
             document.querySelector('form').reset();
+            
+            // 隐藏结果部分
             document.getElementById('resultsSection').style.display = 'none';
+            
+            // 隐藏进度条
             document.getElementById('progressSection').style.display = 'none';
+            
+            // 清除上传的文件
             uploadedFile = null;
             
+            // 移除文件名显示
             const existingFileName = document.querySelector('.upload-section p[data-filename]');
             if (existingFileName) {
                 existingFileName.remove();
             }
             
+            // 滚动到顶部
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     </script>

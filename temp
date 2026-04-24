@@ -1,0 +1,17 @@
+
+L229 # 生成通用学科分析
+def generate_(data, ):
+    # 按班级分组计算
+    class_analysis = data.groupby('行政班级')[].mean().round(2)
+    
+    # 按班级名称升序排序
+    class_analysis = class_analysis.sort_index()
+    
+    # 计算全年级数据
+    total_analysis = data[].mean().round(2)
+    total_analysis = pd.DataFrame([total_analysis], index=['总平均值'])
+    
+    # 合并结果
+    all_analysis = pd.concat([total_analysis, class_analysis])
+    
+    return all_analysis

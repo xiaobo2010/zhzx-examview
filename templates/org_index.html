@@ -473,10 +473,7 @@
                     <a href="#" class="navbar-link" data-nav="class-averages">班级平均分</a>
                 </li>
                 <li class="navbar-item">
-                    <a href="#" class="navbar-link" data-nav="info-analysis">信息学科</a>
-                </li>
-                <li class="navbar-item">
-                    <a href="#" class="navbar-link" data-nav="general-analysis">通用学科</a>
+                    <a href="#" class="navbar-link" data-nav="info-analysis">语文学科</a>
                 </li>
             </ul>
         </div>
@@ -528,6 +525,8 @@
                 <li>按题目编号自然排序</li>
                 <li>生成带色阶效果的Excel分析报告</li>
                 <li>结果文件将自动下载到本地</li>
+                <li>由XiaoBo2010二次开发 :)</li>
+                <li>也不用捐咖啡了,给我比个心就行 :D</li>
             </ul>
         </div>
         
@@ -708,7 +707,7 @@
                 } else {
                     // 错误处理
                     clearInterval(progressInterval);
-                    progressStatus.textContent = '分析过程中出现错误';
+                    progressStatus.textContent = '分析过程中出现错误:(';
                     progressTask.textContent = '分析失败';
                     document.querySelector('.progress-icon').textContent = '❌';
                     
@@ -717,7 +716,7 @@
                         const errorData = JSON.parse(xhr.responseText);
                         alert(`错误：${errorData.error}`);
                     } catch {
-                        alert('分析过程中出现错误，请重试');
+                        alert('分析过程中出现错误，请重试:(');
                     }
                 }
             };
@@ -725,7 +724,7 @@
             // 处理错误
             xhr.onerror = function() {
                 clearInterval(progressInterval);
-                progressStatus.textContent = '网络错误，请检查连接';
+                progressStatus.textContent = '网络错误，请检查连接:/';
                 progressTask.textContent = '分析失败';
                 document.querySelector('.progress-icon').textContent = '❌';
                 alert('网络错误，请检查连接后重试');

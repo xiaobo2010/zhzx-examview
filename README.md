@@ -1,4 +1,6 @@
 # 考试数据分析系统
+# 由XiaoBo2010 再次开发, 重写Flask UI+Analyze逻辑, 适配语文学科。
+# 以下是原项目的开发文档。
 
 ## 项目需求
 
@@ -24,7 +26,7 @@
 
 ## 技术栈
 
-- **后端**：Python 3.x, Flask, pandas, openpyxl, numpy
+- **后端**：Python 3.x, Flask, pandas, openpyxl, numpy, xlrd
 - **前端**：HTML5, CSS3, JavaScript
 - **数据处理**：pandas用于数据分析，openpyxl用于Excel文件操作
 
